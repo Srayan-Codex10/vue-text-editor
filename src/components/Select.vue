@@ -41,7 +41,7 @@ export default {
       debugger
       if (newFont && newFont !== oldFont) {
         this.selected = newFont;
-        this.setValue(newFont);
+        // this.setValue(newFont);
       }
     }
   }

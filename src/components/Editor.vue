@@ -12,8 +12,10 @@
 import Select from './Select.vue';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import TextStyle from '@tiptap/extension-text-style';
-import StarterKit from '@tiptap/starter-kit';
 import FontFamily from '@tiptap/extension-font-family';
+import Document from '@tiptap/extension-document';
+import Text from '@tiptap/extension-text';
+import Paragraph from '@tiptap/extension-paragraph';
 
 export default {
     data() {
@@ -53,9 +55,11 @@ export default {
     },
     mounted() {
         this.editor = new Editor({
-            content: '<p> Test Font </p>',
+            content: '<p> <span style="font-family: \'Arial\'">Test Font</span> </p>',
             extensions: [
-                StarterKit,
+                Document,
+                Text,
+                Paragraph,
                 TextStyle,
                 FontFamily
             ],
@@ -96,9 +100,9 @@ export default {
     outline: none;
 }
 
-.toolbar {
+/* .toolbar {
     padding: 1px;
-}
+} */
 
 .tiptap {
     padding: 0.5em;
