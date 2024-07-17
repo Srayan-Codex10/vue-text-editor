@@ -2,7 +2,7 @@
     <div class="container">
         <div v-if="editor" class="toolbar">
             <div class="button-group">
-                <Select :editor="editor" :selectedFont="fontCheck"></Select>
+                <Select :editor="editor" :selectedFont="fontCheck" :header="headerCheck"></Select>
             </div>
         </div>
         <editor-content :editor="editor"></editor-content>
@@ -15,17 +15,28 @@ import TextStyle from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
 import Document from '@tiptap/extension-document';
 import Text from '@tiptap/extension-text';
+import Heading from '@tiptap/extension-heading';
 import Paragraph from '@tiptap/extension-paragraph';
 
 export default {
     data() {
         return {
             fontCheck: 3,
+            headerCheck: 0,
             editor: null,
             fonts: [
                 { name: 'Georgia', id: 1 },
                 { name: 'Roboto', id: 2 },
-                { name: 'Arial', id: 3 }]
+                { name: 'Arial', id: 3 }],
+            headings: [
+                { name: 'Normal', id: 0 },
+                { name: 'Heading 1', id: 1 },
+                { name: 'Heading 2', id: 2 },
+                { name: 'Heading 3', id: 3 },
+                { name: 'Heading 4', id: 4 },
+                { name: 'Heading 5', id: 5 },
+                { name: 'Heading 6', id: 6 },
+            ]
         }
     },
     props: {
@@ -51,6 +62,20 @@ export default {
                     this.fontCheck = this.fonts.find(({ name }) => name === font.name).id;
                 }
             }
+        },
+        changeHeadingDropdown(editor) {
+            for (const header of this.headings) {
+                if (header.id !== 0) {
+                    if (editor.isActive('heading', { level: header.id })) {
+                        this.headerCheck = header.id;
+                    }
+                } else if (header.id === 0) {
+                    if (editor.isActive('paragraph')) {
+                        this.headerCheck = header.id;
+                    }
+                }
+            }
+
         }
     },
     mounted() {
@@ -61,15 +86,15 @@ export default {
                 Text,
                 Paragraph,
                 TextStyle,
-                FontFamily
+                FontFamily,
+                Heading
             ],
             onUpdate: () => {
                 this.$emit('update: modelValue', this.editor.getHTML());
             },
             onSelectionUpdate: ({ editor }) => {
-                debugger
-                // console.log(editor.isActive('textStyle', { fontFamily: 'Arial' }));
                 this.changeFontDropdown(editor);
+                this.changeHeadingDropdown(editor);
             }
         })
     },
@@ -92,8 +117,11 @@ export default {
 }
 
 .button-group {
-    padding: 0.7em;
+    padding: 0.7em 0.1em;
     border-bottom: 1px solid gray;
+    width: 100%;
+    display: flex;
+    box-sizing: border-box;
 }
 
 .tiptap:focus {
