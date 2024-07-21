@@ -66,10 +66,10 @@ export default {
       debugger
       this.$props.editor.chain().focus().extendMarkRange('link').setLink({
         href: '',
-        class: id,
+        class: `${id} anchor-link`,
         target: null
       }).run()
-      let targetEl = document.querySelector(`a.${id}`);
+      let targetEl = document.getElementsByClassName(id)[0];
       targetEl.addEventListener("click", (e) => {
         e.preventDefault();
         debugger
