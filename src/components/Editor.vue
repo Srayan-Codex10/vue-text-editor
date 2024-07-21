@@ -2,21 +2,28 @@
     <div class="container">
         <div v-if="editor" class="toolbar">
             <div class="button-group">
-                <Select :editor="editor" :selectedFont="fontCheck" :header="headerCheck"></Select>
+                <Controls :editor="editor" :selectedFont="fontCheck" :header="headerCheck"></Controls>
             </div>
         </div>
         <editor-content :editor="editor"></editor-content>
     </div>
 </template>
 <script>
-import Select from './Select.vue';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import TextStyle from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
 import Document from '@tiptap/extension-document';
 import Text from '@tiptap/extension-text';
-import Heading from '@tiptap/extension-heading';
+// import Heading from '@tiptap/extension-heading';
+import Heading from '../extensions/custom-heading';
 import Paragraph from '@tiptap/extension-paragraph';
+import Placeholder from '@tiptap/extension-placeholder';
+import Link from '@tiptap/extension-link';
+import Controls from './Controls.vue';
+
+const CustomDocument = Document.extend({
+    content: 'heading block*'
+})
 
 export default {
     data() {
@@ -80,19 +87,31 @@ export default {
     },
     mounted() {
         this.editor = new Editor({
-            content: '<p> <span style="font-family: \'Arial\'">Test Font</span> </p>',
+            content: '',
             extensions: [
-                Document,
+                CustomDocument,
                 Text,
                 Paragraph,
+                Placeholder.configure({
+                    placeholder: ({ node }) => {
+                        if (node.type.name === 'heading') {
+                            return 'Document Title....'
+                        }
+                    }
+                }),
                 TextStyle,
                 FontFamily,
-                Heading
+                Heading,
+                Link.configure({
+                    linkOnPaste: true,
+                    openOnClick: true
+                })
             ],
             onUpdate: () => {
                 this.$emit('update: modelValue', this.editor.getHTML());
             },
             onSelectionUpdate: ({ editor }) => {
+                // debugger
                 this.changeFontDropdown(editor);
                 this.changeHeadingDropdown(editor);
             }
@@ -103,7 +122,7 @@ export default {
     },
     components: {
         EditorContent,
-        Select
+        Controls
     }
 }
 </script>
@@ -112,8 +131,17 @@ export default {
 .container {
     width: 50%;
     height: 50%;
+    min-height: 500px;
+    max-height: 600px;
     border: 1px solid gray;
+    /* overflow: auto; */
     /* padding: 2em; */
+}
+
+.container div:nth-child(2) {
+    overflow: auto;
+    max-height: calc(500px - 55px);
+    box-sizing: border-box;
 }
 
 .button-group {
@@ -134,5 +162,13 @@ export default {
 
 .tiptap {
     padding: 0.5em;
+    box-sizing: border-box;
+}
+
+h1.is-empty:first-child::before {
+    content: attr(data-placeholder);
+    pointer-events: none;
+    color: rgba(128, 128, 128, 0.194);
+    /* float: left */
 }
 </style>

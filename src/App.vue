@@ -1,5 +1,6 @@
 <script>
 import Editor from './components/Editor.vue';
+import 'remixicon/fonts/remixicon.css';
 
 export default {
   data() {
