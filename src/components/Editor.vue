@@ -140,7 +140,7 @@ export default {
 
 .container div:nth-child(2) {
     overflow: auto;
-    max-height: calc(500px - 55px);
+    max-height: calc(600px - 190px);
     box-sizing: border-box;
 }
 

@@ -61,7 +61,23 @@ export default {
       })
       console.log(this.anchorHeaders);
       this.isShow = !this.isShow;
-    }
+    },
+    createAnchor(id, clazz) {
+      debugger
+      this.$props.editor.chain().focus().extendMarkRange('link').setLink({
+        href: '',
+        class: id,
+        target: null
+      }).run()
+      let targetEl = document.querySelector(`a.${id}`);
+      targetEl.addEventListener("click", (e) => {
+        e.preventDefault();
+        debugger
+        let anchor = document.getElementById(id);
+        anchor.scrollIntoView({ behavior: "smooth" });
+      })
+
+    },
   },
   mounted() {
     this.initFont();
@@ -93,15 +109,24 @@ export default {
     <button @click="anchorSections()">
       <i class="ri-link-m"></i>
     </button>
-    <div v-if="isShow" class="header-sections">
-      <div class="head-item" v-for="(head, index) in anchorHeaders" :key="index" :value="head.id">{{ head.name }}</div>
-    </div>
+  </div>
+  <div v-if="isShow" class="header-sections">
+    <div class="head-item" v-for="(head, index) in anchorHeaders" :key="index" :value="head.id"
+      @click="createAnchor(head.id, 'anchor-link')">{{ head.name }}</div>
   </div>
 </template>
 
 <style>
 body {
   padding: 50px;
+}
+
+.header-sections {
+  position: relative;
+  z-index: 1;
+  /* left: 2%; */
+  /* right: 2.3em; */
+  /* top: 4em; */
 }
 
 .head-item {
