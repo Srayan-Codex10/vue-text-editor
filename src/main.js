@@ -7,9 +7,6 @@ import App from "./App.vue";
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
 
-// Components
-import App from "./App.vue";
-
 const vuetify = createVuetify();
 
 console.log(import.meta.env);

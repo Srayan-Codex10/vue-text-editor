@@ -1,26 +1,17 @@
-<script>
-import Editor from './components/Editor.vue';
+<script setup lang="ts">
+// import Editor from './components/Editor.vue';
+import EditorViewer from './components/EditorWindow/EditorViewer.vue';
 import 'remixicon/fonts/remixicon.css';
 
-export default {
-  data() {
-    return {
-      editorContent: ''
-    }
-  },
-  methods: {
-  },
-  components: {
-    Editor
-  }
-}
 </script>
 
 <template>
   <!-- <Select></Select> -->
-  <div class="text-editor">
-    <Editor v-model="editorContent"></Editor>
-  </div>
+  <v-app>
+    <v-main>
+      <EditorViewer></EditorViewer>
+    </v-main>
+  </v-app>>
 </template>
 
 <style>
