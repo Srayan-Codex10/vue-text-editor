@@ -1,7 +1,13 @@
 // import './assets/main.css'
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 
-console.log(import.meta.env)
-createApp(App).mount('#app')
+// Vuetify
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+
+const vuetify = createVuetify();
+
+console.log(import.meta.env);
+createApp(App).use(vuetify).mount("#app");
